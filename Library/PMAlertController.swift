@@ -136,9 +136,9 @@ import UIKit
     }
     
     //MARK: - Text Fields
-    @objc open func addTextField(textField:UITextField? = nil, textFieldDelegate: UITextFieldDelegate? = nil,  _ configuration: (_ textField: UITextField?) -> Void){
+    @objc open func addTextField(textField:UITextField? = nil,  _ configuration: (_ textField: UITextField?) -> Void){
         let textField = textField ?? UITextField()
-        textField.delegate = textFieldDelegate ?? self
+        textField.delegate = self
         textField.returnKeyType = .done
         //        textField.font = UIFont(name: "Avenir-Heavy", size: 17)
         textField.textAlignment = .center
