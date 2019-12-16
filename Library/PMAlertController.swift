@@ -40,6 +40,7 @@ import UIKit
     var animator : UIDynamicAnimator?
     
     open var textFields: [UITextField] = []
+    open var actions: [PMAlertAction] = []
     
     @objc open var gravityDismissAnimation = true
     @objc open var dismissWithBackgroudTouch = false // enable touch background to dismiss. Off by default.
@@ -60,7 +61,8 @@ import UIKit
     
     
     //MARK: - Initialiser
-    @objc public convenience init(title: String?, description: String?, image: UIImage?, style: PMAlertControllerStyle) {
+    @objc public convenience init(title: String?, description: String?, titleColor: UIColor? = nil, descriptionColor: UIColor? = nil, image: UIImage?, style: PMAlertControllerStyle) {
+        
         self.init()
         guard let nib = loadNibAlertController(), let unwrappedView = nib[0] as? UIView else { return }
         self.view = unwrappedView
@@ -81,6 +83,14 @@ import UIKit
             alertDescription.text = description
         }else{
             alertDescription.isHidden = true
+        }
+        
+        if let titleColor = titleColor {
+            alertTitle.textColor = titleColor
+        }
+        
+        if let descriptionColor = descriptionColor {
+            alertDescription.textColor = descriptionColor
         }
         
         //if alert width = 270, else width = screen width - 36
@@ -106,6 +116,8 @@ import UIKit
             alertActionStackView.axis = .horizontal
         }
         
+        actions.append(alertAction)
+        
         alertAction.addTarget(self, action: #selector(PMAlertController.dismissAlertController(_:)), for: .touchUpInside)
     }
     
@@ -124,11 +136,11 @@ import UIKit
     }
     
     //MARK: - Text Fields
-    @objc open func addTextField(textField:UITextField? = nil, _ configuration: (_ textField: UITextField?) -> Void){
+    @objc open func addTextField(textField:UITextField? = nil, textFieldDelegate: UITextFieldDelegate? = nil,  _ configuration: (_ textField: UITextField?) -> Void){
         let textField = textField ?? UITextField()
-        textField.delegate = self
+        textField.delegate = textFieldDelegate ?? self
         textField.returnKeyType = .done
-        textField.font = UIFont(name: "Avenir-Heavy", size: 17)
+        //        textField.font = UIFont(name: "Avenir-Heavy", size: 17)
         textField.textAlignment = .center
         configuration (textField)
         _addTextField(textField)

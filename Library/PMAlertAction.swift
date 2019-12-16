@@ -27,17 +27,25 @@ import UIKit
         super.init(frame: CGRect.zero)
     }
     
-    @objc public convenience init(title: String?, style: PMAlertActionStyle, action: (() -> Void)? = nil){
+    @objc public convenience init(title: String?, style: PMAlertActionStyle, font: UIFont? = nil, actionColor: UIColor? = nil, action: (() -> Void)? = nil){
         self.init()
         
         self.action = action
         self.addTarget(self, action: #selector(PMAlertAction.tapped(_:)), for: .touchUpInside)
         
         self.setTitle(title, for: UIControl.State())
-        self.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 17)
+        self.titleLabel?.font = font ?? UIFont(name: "Avenir-Heavy", size: 17)
         
         self.actionStyle = style
-        style == .default ? (self.setTitleColor(UIColor(red: 191.0/255.0, green: 51.0/255.0, blue: 98.0/255.0, alpha: 1.0), for: UIControl.State())) : (self.setTitleColor(UIColor.gray, for: UIControl.State()))
+        
+        if let actionColor = actionColor {
+            
+            self.setTitleColor(actionColor, for: UIControl.State())
+        }
+        else {
+            
+            (self.setTitleColor(style == .default ? UIColor(red: 191.0/255.0, green: 51.0/255.0, blue: 98.0/255.0, alpha: 1.0) : UIColor.gray, for: UIControl.State()))
+        }
         
         self.addSeparator()
     }
